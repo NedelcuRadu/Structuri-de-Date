@@ -1,5 +1,6 @@
-from random import randint, choice
+from random import randint, choice, normalvariate, gauss
 from timeit import default_timer as timer
+import timeit
 from heapq import heapify, heappop
 from math import log, floor
 
@@ -140,6 +141,14 @@ def QuickSort(L, inf, sup, fct_pivot=pivot_mediana):
     return L
 
 
+def primul(L):
+    return L[0]
+
+
+def mijloc(L):
+    return L[len(L) // 2]
+
+
 def InsertionSort(L):
     global start, time_limit
     for i in range(0, len(L)):
@@ -161,11 +170,79 @@ def IntroSort(L):
         return L
     else:
         if round(log(n, 10) * 10) == 0:
-            L = HeapSort_imported(L)
+            HeapSort_imported(L)
         else:
             p = n // 2
-            # p= partition(L)
             return interclasare(IntroSort(L[:p]), IntroSort(L[p:]))
+
+
+def InsSort(arr, begin, end):
+    global start, time_limit
+    for i in range(begin + 1, end + 1):
+        if timer() - start < time_limit:
+            elem = arr[i]
+            j = i - 1
+            while j >= begin and elem < arr[j]:
+                arr[j + 1] = arr[j]
+                j -= 1
+            arr[j + 1] = elem
+    return arr
+
+
+def ShellSort(L):
+    gaps = [0]
+    gap = 3
+    while gap < len(L):
+        gaps.append(gap)
+        gap = (gap + 1) * 2 - 1
+    for gap in gaps:
+        arr = InsSort(L, gap, len(L) - 1)
+    return arr
+
+
+def tim_merge(L, st, mid, dr):  # Interclasam 2 runs sortate din acelasi array
+    if mid == end:
+        return L
+    first = L[st:mid + 1]  # Separam cele 2 runs
+    last = L[mid + 1:dr + 1]
+    len1 = len(first)
+    len2 = len(last)
+    i = 0
+    j = 0
+    ind = st
+    while i < len1 and j < len2:  # Interclasare
+        if first[i] < last[j]:
+            L[ind] = first[i]
+            i += 1
+        else:
+            L[ind] = last[j]
+            j += 1
+        ind += 1
+    while i < len1:
+        L[ind] = first[i]
+        i += 1
+        ind += 1
+    while j < len2:
+        L[ind] = last[j]
+        j += 1
+        ind += 1
+    return L
+
+
+def TimSort(L,run_size = 128):
+    n = len(L)
+    for st in range(0, n, run_size):  # Sortam fiecare run folosind InsertionSort
+        dr = min(st + run_size - 1, n - 1)
+        L = InsSort(L, st, dr)
+
+    curr_size = run_size
+    while curr_size < n:  # Interclasam runs
+        for st in range(0, n, curr_size * 2):
+            mid = min([n - 1, st + curr_size - 1])
+            dr = min([n - 1, mid + curr_size])
+            L = tim_merge(L, st, mid, dr)
+        curr_size *= 2
+    return L
 
 
 def RadixSort(A, baza=10):
@@ -188,17 +265,30 @@ def RadixSort(A, baza=10):
     return A
 
 
+def SelectionSort(L):
+    global start, time_limit
+    for i in range(len(L)):
+        if timer() - start < time_limit:
+            a = i
+            for j in range(i + 1, len(L)):
+                if L[a] > L[j]:
+                    a = j
+            L[i], L[a] = L[a], L[i]
+    return L
+
+
 with open("teste.in") as f:
     nr_test = 0
     time_limit = 1
     for test in f:
-        sortari = [CountingSort, HeapSort_imported, HeapSort, RadixSort, MergeSort, BubbleSort, InsertionSort]
+        sortari = [CountingSort, HeapSort_imported, HeapSort, RadixSort, MergeSort, BubbleSort, InsertionSort, TimSort,
+                   IntroSort, SelectionSort, ShellSort]
         test = test.split()
         N = int(test[0])
         MAX = int(test[1])
         A = [randint(1, MAX) for iter in range(N)]
         nr_test += 1
-        min = [9999, "Default"]
+        min_time = [9999, "Default"]
         print(f"--- TESTUL NR {nr_test} - {N} NR CU MAXIMUL DE {MAX} ---")
 
         for sortare in sortari:
@@ -209,13 +299,39 @@ with open("teste.in") as f:
             time = round((end - start) * 1000, 3)
             if (isSorted(B)):
                 print(f"{sortare.__name__} - Status: OK - Time: {time} ms")
-                if time < min[0]:
-                    min = [time, sortare.__name__]
+                if time < min_time[0]:
+                    min_time = [time, sortare.__name__]
             else:
                 if (time > time_limit):
                     print(f"{sortare.__name__} - Status: FAILED - Reason: OUT OF TIME")
                 else:
                     print(f"{sortare.__name__} - Status: FAILED - Reason: Array not sorted")
+
+        # QuickSort Primul Element
+        B = [x for x in A]
+        start = timer()
+        B = QuickSort(B, 0, len(B) - 1, primul)
+        end = timer()
+        time = round((end - start) * 1000, 3)
+        if time < min_time[0]:
+            min_time = [time, "QuickSort Primul Element"]
+        if (isSorted(B)):
+            print(f"QuickSort Primul Element - Status: OK - Time: {time} ms")
+        else:
+            print(f"QuickSort Primul Element - Status: FAILED")
+
+        # QuickSort Element Mijloc
+        B = [x for x in A]
+        start = timer()
+        B = QuickSort(B, 0, len(B) - 1, mijloc)
+        end = timer()
+        time = round((end - start) * 1000, 3)
+        if time < min_time[0]:
+            min_time = [time, "QuickSort Element Mijloc"]
+        if (isSorted(B)):
+            print(f"QuickSort Element Mijloc - Status: OK - Time: {time} ms")
+        else:
+            print(f"QuickSort Element Mijloc - Status: FAILED")
 
         # QuickSort Random
         B = [x for x in A]
@@ -223,8 +339,8 @@ with open("teste.in") as f:
         B = QuickSort(B, 0, len(B) - 1, choice)
         end = timer()
         time = round((end - start) * 1000, 3)
-        if time < min[0]:
-            min = [time, "QuickSort Random"]
+        if time < min_time[0]:
+            min_time = [time, "QuickSort Random"]
         if (isSorted(B)):
             print(f"QuickSort Random - Status: OK - Time: {time} ms")
         else:
@@ -236,8 +352,8 @@ with open("teste.in") as f:
         B = QuickSort(B, 0, len(A) - 1, pivot_mediana)
         end = timer()
         time = round((end - start) * 1000, 3)
-        if time < min[0]:
-            min = [time, "QuickSort Mediana Medianelor"]
+        if time < min_time[0]:
+            min_time = [time, "QuickSort Mediana Medianelor"]
         if (isSorted(B)):
             print(f"QuickSort Mediana Medianelor - Status: OK - Time: {time} ms")
         else:
@@ -254,6 +370,6 @@ with open("teste.in") as f:
             print(f"Sortarea din limbaj - Status: FAILED - Time: {time_sorted} ms")
 
         print(
-            f"Timpul minim pt sortările implementate dat de {min[1]}: {min[0]} ms vs {time_sorted} ms al sortării din limbaj. "
-            f"Sortarea din limbaj a fost cu {round(min[0] - time_sorted, 2)} ms mai rapidă, adică {round(min[0] / time_sorted * 100, 2)}%.")
+            f"Timpul minim pt sortările implementate dat de {min_time[1]}: {min_time[0]} ms vs {time_sorted} ms al sortării din limbaj. "
+            f"Sortarea din limbaj a fost cu {round(min_time[0] - time_sorted, 2)} ms mai rapidă, adică {round(min_time[0] / time_sorted * 100, 2)}%.")
         print()
