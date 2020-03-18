@@ -8,6 +8,10 @@
 * QuickSort - mediana medianelor / random / element static 
 * RadixSort 
 * Counting Sort
+* Selection Sort
+* Intro Sort - conform pseudocodului de pe Wikipedia
+* Shell Sort - gaps de forma 2*k+1
+* TimSort - run_size 
 
 _Testele sunt generate automat folosind random.randint_
 
