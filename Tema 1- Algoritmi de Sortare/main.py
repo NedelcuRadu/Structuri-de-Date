@@ -9,18 +9,18 @@ def min_heapify(L, node, size):
     st = node * 2 + 1
     dr = node * 2 + 2
     smallest = node
-    if dr < size and L[dr] < L[smallest]:
+    if dr < size and L[dr] < L[smallest]:   # Gasim minimul dintre tata, fiul stang si fiul drept
         smallest = dr
     if st < size and L[st] < L[smallest]:
         smallest = st
     if smallest != node:
-        L[smallest], L[node] = L[node], L[smallest]
-        min_heapify(L, smallest, size)
+        L[smallest], L[node] = L[node], L[smallest] # Daca am gasit un nou minim interschimbam
+        min_heapify(L, smallest, size) # Continuam recursia
 
 
 def make_heap(L, size):
-    for i in range(size // 2 + 1, -1, -1):
-        min_heapify(L, i, size)
+    for i in range(size // 2 + 1, -1, -1): # Pt nodurile care nu sunt frunze
+        min_heapify(L, i, size) 
 
 
 def HeapSort(L):
@@ -31,27 +31,27 @@ def HeapSort(L):
     i = 0
     while (n):
         if timer() - start < time_limit:
-            rez.append(L[0])
+            rez.append(L[0]) # Extragem minimul
             i += 1
             n -= 1
-            make_heap(L[i:], n)
+            make_heap(L[i:], n) # Refacem heapul
         else:
-            return [0, -1]
+            return [0, -1]  # Daca a trecut de limita de timp
     return rez
 
 
 def pivot_mediana(A):
     if len(A) <= 5:
         try:
-            return sorted(A)[len(A) // 2]
+            return sorted(A)[len(A) // 2] # Luam elementul din mijlocul vectorului sortat
         except IndexError:
             return 0
-    subliste = [sorted(A[i:i + 5]) for i in range(0, len(A), 5)]
-    mediane = [sl[len(sl) // 2] for sl in subliste]
-    return pivot_mediana(mediane)
+    subliste = [sorted(A[i:i + 5]) for i in range(0, len(A), 5)]    # Facem subliste sortate
+    mediane = [sl[len(sl) // 2] for sl in subliste] # Luam medianele din sublise
+    return pivot_mediana(mediane)   # Continuam recursia
 
 
-def interclasare(lst, ldr):
+def interclasare(lst, ldr): # Functie de interclasare pt MergeSort
     i = j = 0
     rez = []
     while i < len(lst) and j < len(ldr):
@@ -85,7 +85,7 @@ def BubbleSort(L):
     return L
 
 
-def isSorted(L):
+def isSorted(L):    # Functie care verifica daca vectorul e sortat
     for i in range(len(L) - 1):
         if L[i + 1] < L[i]:
             # print(f"Nu e bine la {L[i]},{L[i + 1]}")
@@ -93,25 +93,25 @@ def isSorted(L):
     return True
 
 
-def CountingSort(L):
+def CountingSort(L): 
     maxim = max(L)
-    if max(L) > 1e7:
+    if max(L) > 1e7: # Nu putem aloca mai multa memorie 
         print("Maximul prea mare pt CountingSort")
         return [0, -1]
     else:
         A = []
         rez = []
-        for i in range(maxim + 1):
-            A.append(0)
-        for nr in L:
+        for i in range(maxim + 1): # Construim vectorul
+            A.append(0) 
+        for nr in L: # Numaram aparitiile
             A[nr] += 1
         for i in range(maxim + 1):
             for j in range(A[i]):
-                rez.append(i)
+                rez.append(i) # Construim vectorul rezultat
         return rez
 
 
-def HeapSort_imported(L):
+def HeapSort_imported(L): # Heap sort folosind libraria heapq
     rez = []
     heapify(L)
     while len(L):
@@ -119,7 +119,7 @@ def HeapSort_imported(L):
     return rez
 
 
-def QuickSort(L, inf, sup, fct_pivot=pivot_mediana):
+def QuickSort(L, inf, sup, fct_pivot=pivot_mediana): # fct_pivot trebuie sa fie o functie ce primeste o lista si returneaza o valoare
     i = inf
     j = sup
     pivot = fct_pivot(L[inf:sup])
@@ -141,7 +141,7 @@ def QuickSort(L, inf, sup, fct_pivot=pivot_mediana):
     return L
 
 
-def primul(L):
+def primul(L): 
     return L[0]
 
 
@@ -164,16 +164,16 @@ def InsertionSort(L):
     return L
 
 
-def IntroSort(L):
+def IntroSort(L):   
     n = len(L)
     if n <= 1:
         return L
     else:
-        if round(log(n, 10) * 10) == 0:
+        if round(log(n, 10) * 10) == 0: # Daca adancimea arborelui e mica, facem HeapSort
             HeapSort_imported(L)
         else:
             p = n // 2
-            return interclasare(IntroSort(L[:p]), IntroSort(L[p:]))
+            return interclasare(IntroSort(L[:p]), IntroSort(L[p:])) # Facem MergeSort
 
 
 def InsSort(arr, begin, end):
@@ -192,10 +192,10 @@ def InsSort(arr, begin, end):
 def ShellSort(L):
     gaps = [0]
     gap = 3
-    while gap < len(L):
+    while gap < len(L): #Construim lista de gap-uri
         gaps.append(gap)
-        gap = (gap + 1) * 2 - 1
-    for gap in gaps:
+        gap = (gap + 1) * 2 - 1 
+    for gap in gaps: # Facem insertion sort cu gap-uri din ce in ce mai mari
         arr = InsSort(L, gap, len(L) - 1)
     return arr
 
@@ -270,10 +270,10 @@ def SelectionSort(L):
     for i in range(len(L)):
         if timer() - start < time_limit:
             a = i
-            for j in range(i + 1, len(L)):
+            for j in range(i + 1, len(L)): # Caut minimul
                 if L[a] > L[j]:
                     a = j
-            L[i], L[a] = L[a], L[i]
+            L[i], L[a] = L[a], L[i] # Il pun la locul lui
     return L
 
 
