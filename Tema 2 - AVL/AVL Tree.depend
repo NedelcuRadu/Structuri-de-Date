@@ -1,0 +1,18 @@
+# depslib dependency file v1.0
+1585421712 source:e:\c++\avl tree\main.cpp
+	<bits/stdc++.h>
+	"AVL.h"
+
+1585421771 source:e:\c++\avl tree\avl.cpp
+	"AVL.h"
+	<fstream>
+	<iostream>
+
+1585406535 source:e:\c++\avl tree\node.cpp
+	"node.h"
+
+1585406518 e:\c++\avl tree\node.h
+
+1585421507 e:\c++\avl tree\avl.h
+	"node.h"
+
