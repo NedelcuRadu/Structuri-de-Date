@@ -1,0 +1,18 @@
+# depslib dependency file v1.0
+1585523566 source:e:\c++\bloomfilter\main.cpp
+	<bits/stdc++.h>
+	"Bloom.h"
+
+1585520280 e:\c++\bloomfilter\fnv.h
+	<string>
+	<cassert>
+	<stdint.h>
+
+1585523602 e:\c++\bloomfilter\bloom.h
+	<bits/stdc++.h>
+	"fnv.h"
+
+1585523608 source:e:\c++\bloomfilter\bloom.cpp
+	"Bloom.h"
+	<string>
+
