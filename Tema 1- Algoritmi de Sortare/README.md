@@ -13,7 +13,11 @@
 * Shell Sort - gaps de forma 2*k+1
 * TimSort - run_size 
 
-_Testele sunt generate automat folosind random.randint_
+_Format teste (pe cate o linie): N MAX MODE_  
+* N - cate numere sunt
+* MAX - maximul numerelor
+* MODE - felul in care sunt generate ( 0 - RANDOM, 1 - SORTATE, 2 - APROAPE SORTATE, 3 - DESCRESCATOR)
+
 
 ### Concluzii: 
 * Sortarea din limbaj este de cel putin 2 ori mai rapida decat orice alta implementare, pe orice set de date.
