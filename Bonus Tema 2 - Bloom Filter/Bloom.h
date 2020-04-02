@@ -13,9 +13,9 @@ class BloomFilter {
 
   public:
     BloomFilter(int n, double p);
-    uint16_t getBits(uint32_t value, int startBit, int X) ;
-    void insert(string val);
-    bool isThere(string val);
+    uint32_t getBits(uint64_t value, int startBit, int X) ;
+    void insert(uint64_t val);
+    bool isThere(uint64_t val);
 };
 
 #endif // BLOOM_H_INCLUDED

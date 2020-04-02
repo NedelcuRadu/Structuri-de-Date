@@ -32,6 +32,9 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="Bloom.cpp" />
+		<Unit filename="Bloom.h" />
+		<Unit filename="fnv.h" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<code_completion />
