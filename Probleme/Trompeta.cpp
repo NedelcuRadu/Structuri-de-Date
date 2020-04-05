@@ -7,7 +7,7 @@ ofstream out("trompeta.out");
 
 int main() {
     std::ios::sync_with_stdio(false);
-    string A,B;
+    string A,B; // Folosim strings pe post de stack
     int N, M;
     int eliminate = 0;
     in >> N >> M;
