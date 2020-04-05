@@ -20,21 +20,21 @@ int search(int l, int r, int val) {
     return -1;
 
 }
-pNod build(int inl, int inr) {
+pNod build(int inl, int inr) { // Preordinea ne spune radacina curenta, inordinea ne da subarborii stangi si drepti
     if(inl > inr)
         return nullptr;
     pNod temp = new nod;
-    temp->data = pre[index++];
-    temp->dr = nullptr;
+    temp->data = pre[index++]; // Radacina curenta
+    temp->dr = nullptr; 
     temp->st = nullptr;
-    A[pre[index - 1]] = temp;
-    if(inl == inr)
+    A[pre[index - 1]] = temp; // Locul ei din vector
+    if(inl == inr) // Inseamna ca nu mai are fii
         return temp;
-    int index2 = search(inl, inr, temp->data);
+    int index2 = search(inl, inr, temp->data); // Cautam radacina curenta in parcurgerea inordine
 
-    temp->st = build(inl, index2 - 1    );
+    temp->st = build(inl, index2 - 1    ); // Repetam pt arborii stangi si drepti
     temp->dr = build(index2 + 1, inr);
-    return temp;
+    return temp; // Returnam nodul
 }
 
 int main() {
