@@ -1,8 +1,5 @@
 #include "AVL.h"
-#include <fstream>
-#include <iostream>
-using namespace std;
-ofstream out("data.out");
+ofstream out("abce.out");
 pNod AVL::get_root() {
     return root;
 };
@@ -10,50 +7,23 @@ void AVL::set_root(pNod p) {
     root = p;
 }
 pNod AVL::rightRotate(pNod pivot) {
-    int a = 0;
-    int b = 0;
     pNod x = pivot->get_left();
     pivot->set_left( x->get_right());
     x->set_right(pivot);
-    if (pivot->get_left() != nullptr)
-        a = pivot->get_left()->get_height();
-    if (pivot->get_right() != nullptr)
-        b = pivot->get_right()->get_height();
-
-    pivot->set_height(max(a, b) + 1);
-    a = 0;
-    b = 0;
-    if (x->get_left() != nullptr)
-        a = x->get_left()->get_height();
-    if (x->get_right() != nullptr)
-        b = x->get_right()->get_height();
-    x->set_height(max(a, b) + 1);
+    pivot->set_height(max(fheight(pivot->get_right()), fheight(pivot->get_left())) + 1);
+    x->set_height(max(fheight(x->get_right()), fheight(x->get_left())) + 1);
     return x;
 }
 
 pNod AVL::leftRotate(pNod pivot) {
-    int a = 0;
-    int b = 0;
     pNod y = pivot->get_right();
     pivot->set_right(y->get_left());
     y->set_left(pivot);
-    if (pivot->get_left() != nullptr)
-        a = pivot->get_left()->get_height();
-    if (pivot->get_right() != nullptr)
-        b = pivot->get_right()->get_height();
-    pivot->set_height(max(a, b) + 1);
-    a = 0;
-    b = 0;
-    if (y->get_left() != nullptr)
-        a = y->get_left()->get_height();
-    if (pivot->get_right() != nullptr)
-        b = y->get_right()->get_height();
-    y->set_height(max(a, b) + 1);
+    pivot->set_height(max(fheight(pivot->get_right()), fheight(pivot->get_left())) + 1);
+    y->set_height(max(fheight(y->get_right()), fheight(y->get_left())) + 1);
     return y;
 }
 pNod AVL::insert_helper(pNod root, int key) {
-    int a = 1;
-    int b = 1;
     if (root == nullptr) {
         root = new node;
         root->set_key(key);
@@ -64,12 +34,7 @@ pNod AVL::insert_helper(pNod root, int key) {
     else
         root->set_right(insert_helper(root->get_right(), key));
 
-    if (root->get_left() != NULL)
-        a = root->get_left()->get_height();
-    if( root->get_right() != NULL)
-        b = root->get_right()->get_height();
-
-    root ->set_height(1 + max(a, b));
+    root ->set_height(max(fheight(root->get_right()), fheight(root->get_left())) + 1);
     int balance = root->get_balance();
 
     //Left Left - subarborele stang e prea inalt, il rotim la dreapta
@@ -119,7 +84,7 @@ bool AVL::find_helper(pNod pivot, int val) {
     else
         return find_helper(pivot->get_right(), val);
 }
-bool AVL::find(int val) {
+void AVL::find(int val) {
     out << find_helper(root, val) << '\n';
 }
 
@@ -166,7 +131,7 @@ void AVL::interval_helper(pNod p, int x, int y) {
     int key = p->get_key();
     if(x < key)
         interval_helper(p->get_left(), x, y);
-    if(x < key && y > key)
+    if(x <= key && y >= key)
         out << key << " ";
     if(y > key)
         interval_helper(p->get_right(), x, y);
@@ -184,8 +149,6 @@ pNod AVL::celmaimic(pNod root) {
     return iter;
 }
 pNod AVL::delete_helper(pNod p, int key) {
-    int a = 1;
-    int b = 1;
     if (p == nullptr)
         return p;
     if (p->get_key() < key)
@@ -207,23 +170,18 @@ pNod AVL::delete_helper(pNod p, int key) {
                 p = nullptr;
             } else // 1 copil
                 p = a;
-            free(a);
-
         } else
             // 2 copii
         {
             pNod a = celmaimic(p->get_right());
             p->set_key(a->get_key());
+            p->set_right(delete_helper(p->get_right(), a->get_key()));
         }
     }
 
     if (p == nullptr)
         return p ;
-    if (p->get_left() != NULL)
-        a = p->get_left()->get_height();
-    if( p->get_right() != NULL)
-        b = p->get_right()->get_height();
-    p->set_height(1 + max(a, b));
+    p->set_height(max(fheight(p->get_right()), fheight(p->get_left())) + 1);
 
     int balance = p->get_balance();
     if(balance > 1) {
@@ -245,10 +203,10 @@ pNod AVL::delete_helper(pNod p, int key) {
     return p;
 }
 void AVL::del(int key) {
-    int k=0;
-    while(find_helper(root,key))
-        {delete_helper(root,key);
-        k++;}
-    out<<k<<'\n';
+    // int k = 0;
+    if(find_helper(root, key)) {
+        set_root(delete_helper(root, key));
+        //k++;
+    }
+    // out << k << '\n'; In problema nu se mai cere si nr de aparitii
 }
-
