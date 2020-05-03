@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
-
+// Luam cea mai mica litera din fiecare cuvant si apoi sortam cuvantul obtinut
 int main() {
     int N;
     string cuv;
