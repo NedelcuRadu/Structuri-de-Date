@@ -2,12 +2,15 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+// Sortam dupa cea mai mare "suma"
 bool wayToSort(string a, string b)
 {
     if(a+b > b+a)
         return 1;
     return 0;
 }
+
+// Stergem 0-urile din fata pt cazul in care avem doar 0 in numar
 static inline void ltrim(std::string &s) {
     s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](char ch) {
         return !(ch=='0');
