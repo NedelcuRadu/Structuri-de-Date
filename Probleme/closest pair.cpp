@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-
+// Combinam cei doi vectori, il sortam si aflam diferenta minima dintre 2 elemente provenite din vectori diferiti
 int closestPair(vector<int>& first, vector<int>& second) {
     vector<pair<int,int>> total;
     total.reserve(first.size()+second.size());
