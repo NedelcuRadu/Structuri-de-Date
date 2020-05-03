@@ -2,6 +2,7 @@
 # is an array of 2 elements
 # The function should return an array of arrays
 
+# Adaugam la fiecare pereche frecventa sa, sortam dupa x[0], frecventa, x[1]
 def pair_strange_sort(array):
     dict = {}
     rez = []
