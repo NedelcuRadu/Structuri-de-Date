@@ -1,5 +1,6 @@
 # Parameters a1 and a2 are two arrays of integers
 # The function should return an array of integers
+# Numaram de cate ori apare fiecare numar in fiecare vector si punem in vectorul rezultat minimul dintre ele
 from collections import Counter
 def array_intersection(a1, a2):
     counter1 = Counter(a1)
